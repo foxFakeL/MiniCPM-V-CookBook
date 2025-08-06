@@ -12,8 +12,8 @@ from transformers import AutoModel, AutoTokenizer, AutoProcessor, set_seed
 logger = logging.getLogger(__name__)
 
 
-class ModelV4:
-    def __init__(self, path, multi_gpus=False) -> None:
+class ModelMiniCPMV4:
+    def __init__(self, path) -> None:
         self.model = AutoModel.from_pretrained(
             path, trust_remote_code=True, attn_implementation='sdpa', torch_dtype=torch.bfloat16)
         self.model.eval().cuda()
