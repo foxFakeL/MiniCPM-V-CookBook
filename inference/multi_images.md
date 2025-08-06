@@ -20,8 +20,6 @@ tokenizer = AutoTokenizer.from_pretrained(
 ```python
 image1 = Image.open('assets/multi1.png').convert('RGB')
 image2 = Image.open('assets/multi2.png').convert('RGB')
-display(image1.resize((512,512)))
-display(image2.resize((512,512)))
 question = 'Compare the two images, tell me about the differences between them.'
 
 msgs = [{'role': 'user', 'content': [image1, image2, question]}]

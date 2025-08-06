@@ -20,7 +20,6 @@ tokenizer = AutoTokenizer.from_pretrained(
 
 ```python
 image = Image.open('./assets/single.png').convert('RGB')
-display(image.resize((400, 400)))
 
 # First round chat 
 question = "What is the landform in the picture?"

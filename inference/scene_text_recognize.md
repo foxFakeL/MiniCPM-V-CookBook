@@ -20,7 +20,6 @@ tokenizer = AutoTokenizer.from_pretrained(
 from PIL import Image
 
 car_img = Image.open('./assets/car.png').convert('RGB')
-display(car_img.resize((300, 300)))
 
 prompt = """
 Please detect and extract the vehicle’s license plate number from the image, and return only the plate text.
