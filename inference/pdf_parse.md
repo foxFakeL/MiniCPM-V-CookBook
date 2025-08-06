@@ -26,8 +26,6 @@ from pdf2image import convert_from_path
 def pdf_to_images(pdf_path, dpi=200):
     images = convert_from_path(pdf_path, dpi=dpi)
     images = [image.convert('RGB') for image in images]
-    for image in images:
-        display(image.resize((image.width // 3, image.height // 3)))
     return images
 ```
 

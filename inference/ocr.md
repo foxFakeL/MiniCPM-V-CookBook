@@ -19,7 +19,6 @@ tokenizer = AutoTokenizer.from_pretrained(
 
 ```python
 ocr_image = Image.open('./assets/ocr.png').convert('RGB')
-display(ocr_image.resize((400, 400)))
 
 question = "What is the text in the picture?"
 msgs = [{'role': 'user', 'content': [ocr_image, question]}]
