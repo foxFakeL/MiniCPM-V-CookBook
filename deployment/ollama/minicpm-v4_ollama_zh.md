@@ -2,37 +2,48 @@
 
 ## 1. 安装 Ollama
 
-### macOS
+*   **macOS**: [下载](https://ollama.com/download/Ollama.dmg)
 
-[Download](https://ollama.com/download/Ollama.dmg)
+*   **Windows**: [下载](https://ollama.com/download/OllamaSetup.exe)
 
-### Windows
+*   **Linux**: `curl -fsSL https://ollama.com/install.sh | sh`, 或参照 Ollama 官方[手动安装指南](https://github.com/ollama/ollama/blob/main/docs/linux.md).
 
-[Download](https://ollama.com/download/OllamaSetup.exe)
+*   **Docker**: 官方的 [Ollama Docker 镜像](https://hub.docker.com/r/ollama/ollama) `ollama/ollama` 已在 Docker Hub 上提供。
 
-### Linux
+### 本地构建运行 Ollama
 
-```shell
-curl -fsSL https://ollama.com/install.sh | sh
+环境需求：
+
+- [go](https://go.dev/doc/install) version 1.22 or above
+- cmake version 3.24 or above
+- C/C++ Compiler e.g. Clang on macOS, [TDM-GCC](https://github.com/jmeubank/tdm-gcc/releases) (Windows amd64) or [llvm-mingw](https://github.com/mstorsjo/llvm-mingw) (Windows arm64), GCC/Clang on Linux.
+
+获取 OpenBMB 官方 Ollama 分支：
+
+```sh
+git clone https://github.com/tc-mb/ollama.git
+cd ollama
+git checkout MIniCPM-V
 ```
 
-[Manual install instructions](https://github.com/ollama/ollama/blob/main/docs/linux.md)
+在仓库根目录下编译并运行 Ollama：
 
-### Docker
-
-The official [Ollama Docker image](https://hub.docker.com/r/ollama/ollama) `ollama/ollama` is available on Docker Hub.
+```sh
+go build .
+./ollama serve
+```
 
 ## 2. 快速使用
 
 Ollama 可以直接使用:
 
 ```shell
-ollama run openbmb/minicpm-v4
+./ollama run openbmb/minicpm-v4
 ```
 
 ### 命令行
-用空格分割输入问题，图片路径
-```bash
+用空格分割输入问题、图片路径
+```
 这张图片描述了什么？ xx.jpg
 ```
 ### API
@@ -58,36 +69,10 @@ with open(image_path, 'rb') as image_file:
 
 **若上述方式无法运行，请参考以下教程。**
 
-### 环境需求
-
-- [go](https://go.dev/doc/install) version 1.22 or above
-- cmake version 3.24 or above
-- C/C++ Compiler e.g. Clang on macOS, [TDM-GCC](https://github.com/jmeubank/tdm-gcc/releases) (Windows amd64) or [llvm-mingw](https://github.com/mstorsjo/llvm-mingw) (Windows arm64), GCC/Clang on Linux.
-
 ### 获取 GGUF 模型
 
 *   HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4-gguf
 *   魔搭社区: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf
-
-### 获取 OpenBMB 官方 Ollama 分支
-
-```sh
-git clone https://github.com/OpenBMB/ollama.git
-cd ollama
-```
-
-### 构建 Ollama
-
-```sh
-cmake -B build
-cmake --build build
-```
-
-### 启动 Ollama 服务
-
-```sh
-go run . serve
-```
 
 ### 创建 ModelFile
 
@@ -120,12 +105,12 @@ PARAMETER temperature 0.7
 
 ### 创建 Ollama 模型实例：
 ```bash
-ollama create minicpm-v4 -f minicpmv4.Modelfile
+./ollama create minicpm-v4 -f minicpmv4.Modelfile
 ```
 
 ### 另起一个命令行窗口，运行 Ollama 模型实例：
 ```bash
-ollama run minicpm-v4
+./ollama run minicpm-v4
 ```
 
 ### 输入问题和图片 URL，以空格分隔

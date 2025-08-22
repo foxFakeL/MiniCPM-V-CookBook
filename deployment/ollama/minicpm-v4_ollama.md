@@ -2,37 +2,50 @@
 
 ## 1. Install Ollama
 
-### macOS
+*   **macOS**: Download from [https://ollama.com/download/Ollama.dmg](https://ollama.com/download/Ollama.dmg).
 
-[Download](https://ollama.com/download/Ollama.dmg)
+*   **Windows**: Download from [https://ollama.com/download/OllamaSetup.exe](https://ollama.com/download/OllamaSetup.exe).
 
-### Windows
+*   **Linux**: `curl -fsSL https://ollama.com/install.sh | sh`, or refer to the guide from [ollama](https://github.com/ollama/ollama/blob/main/docs/linux.md).
 
-[Download](https://ollama.com/download/OllamaSetup.exe)
+*   **Docker**: The official [Ollama Docker image](https://hub.docker.com/r/ollama/ollama) `ollama/ollama` is available on Docker Hub.
 
-### Linux
+### Build Ollama locally
 
-```shell
-curl -fsSL https://ollama.com/install.sh | sh
+As updates to the official Ollama version may occasionally introduce minor uncertainties, we provide an additional maintained [branch](https://github.com/tc-mb/ollama/tree/MIniCPM-V) to support stable execution of the MiniCPM-V series models.
+
+Environment requirements:
+
+- [go](https://go.dev/doc/install) version 1.22 or above
+- cmake version 3.24 or above
+- C/C++ Compiler e.g. Clang on macOS, [TDM-GCC](https://github.com/jmeubank/tdm-gcc/releases) (Windows amd64) or [llvm-mingw](https://github.com/mstorsjo/llvm-mingw) (Windows arm64), GCC/Clang on Linux.
+
+Clone OpenBMB Ollama Fork:
+
+```sh
+git clone https://github.com/tc-mb/ollama.git
+cd ollama
+git checkout MIniCPM-V
 ```
 
-[Manual install instructions](https://github.com/ollama/ollama/blob/main/docs/linux.md)
+Then build and run Ollama from the root directory of the repository:
 
-### Docker
-
-The official [Ollama Docker image](https://hub.docker.com/r/ollama/ollama) `ollama/ollama` is available on Docker Hub.
+```sh
+go build .
+./ollama serve
+```
 
 ## 2. Quick Start
 
 The MiniCPM-V 4 model can be used directly:
 
 ```shell
-ollama run openbmb/minicpm-v4
+./ollama run openbmb/minicpm-v4
 ```
 
 ### Command Line
 Separate the input prompt and the image path with space.
-```bash
+```
 What is in the picture? xx.jpg
 ```
 ### API
@@ -58,36 +71,10 @@ with open(image_path, 'rb') as image_file:
 
 **If the method above fails, please refer to the following guide.**
 
-### Environment requirements
-
-- [go](https://go.dev/doc/install) version 1.22 or above
-- cmake version 3.24 or above
-- C/C++ Compiler e.g. Clang on macOS, [TDM-GCC](https://github.com/jmeubank/tdm-gcc/releases) (Windows amd64) or [llvm-mingw](https://github.com/mstorsjo/llvm-mingw) (Windows arm64), GCC/Clang on Linux.
-
 ### Download GGUF Model
 
 *   HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4-gguf
 *   ModelScope: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf
-
-### Clone Official OpenBMB Ollama Fork
-
-```sh
-git clone https://github.com/OpenBMB/ollama.git
-cd ollama
-```
-
-### Configure and build Ollama
-
-```sh
-cmake -B build
-cmake --build build
-```
-
-### Start Ollama Service
-
-```sh
-go run . serve
-```
 
 ### Create a ModelFile
 
@@ -120,13 +107,13 @@ Parameter Descriptions:
 
 ### Create Ollama Model
 ```bash
-ollama create minicpm-v4 -f minicpmv4.Modelfile
+./ollama create minicpm-v4 -f minicpmv4.Modelfile
 ```
 
 ### Run
 In a new terminal window, run the model instance:
 ```bash
-ollama run minicpm-v4
+./ollama run minicpm-v4
 ```
 
 ### Input Prompt
