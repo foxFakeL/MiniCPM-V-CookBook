@@ -1,8 +1,8 @@
 # MiniCPM-V 4.5 - GGUF 量化指南
 
-本指南将引导您完成将 MiniCPM-V 4 PyTorch 模型转换为 GGUF 格式并进行量化的过程。
+本指南将引导您完成将 MiniCPM-V 4.5 PyTorch 模型转换为 GGUF 格式并进行量化的过程。
 
-本指南涉及的模型需要基于 [`llama.cpp`](../../deployment/llama.cpp/minicpm-v4_llamacpp_zh.md)/[`ollama`](../../deployment/ollama/minicpm-v4_ollama_zh.md) 使用。
+本指南涉及的模型需要基于 [`llama.cpp`](../../deployment/llama.cpp/minicpm-v4_5_llamacpp_zh.md)/[`ollama`](../../deployment/ollama/minicpm-v4_5_ollama_zh.md) 使用。
 
 ### 1. 下载 PyTorch 模型
 

@@ -1,8 +1,8 @@
 # MiniCPM-V 4.5 - GGUF Quantization Guide
 
-This guide will walk you through the process of converting the MiniCPM-V 4 PyTorch model to GGUF format and performing quantization.
+This guide will walk you through the process of converting the MiniCPM-V 4.5 PyTorch model to GGUF format and performing quantization.
 
-Models in this guide need to be used with [`llama.cpp`](../../deployment/llama.cpp/minicpm-v4_llamacpp.md)/[`ollama`](../../deployment/ollama/minicpm-v4_ollama.md).
+Models in this guide need to be used with [`llama.cpp`](../../deployment/llama.cpp/minicpm-v4_5_llamacpp.md)/[`ollama`](../../deployment/ollama/minicpm-v4_5_ollama.md).
 
 ### 1. Download the PyTorch Model
 

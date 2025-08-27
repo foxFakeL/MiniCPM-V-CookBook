@@ -1,8 +1,8 @@
 # AWQ
 
-:::{Note}
-**Support:** MiniCPM-V4.5
-:::
+::::{Note}
+**Support:** MiniCPM-V 4.5
+::::
 
 ## Method 1 (Use the pre-quantized model)
 
@@ -91,10 +91,10 @@ print(outputs[0].outputs[0].text)
 
 ### 1.Download the Model
 <!-- 下载模型
-https://huggingface.co/openbmb/MiniCPM-V-4
+https://huggingface.co/openbmb/MiniCPM-V-4_5
  -->
 
-Download the MiniCPM-V-4 model from [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4_5)
+Download the MiniCPM-V 4.5 model from [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4_5)
 
 ```Bash
 git clone https://huggingface.co/openbmb/MiniCPM-V-4_5

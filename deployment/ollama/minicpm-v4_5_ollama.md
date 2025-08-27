@@ -35,7 +35,7 @@ go build .
 
 ## 2. Quick Start
 
-The MiniCPM-V 4 model can be used directly:
+The MiniCPM-V 4.5 model can be used directly:
 
 ```shell
 ./ollama run openbmb/minicpm-v4.5
