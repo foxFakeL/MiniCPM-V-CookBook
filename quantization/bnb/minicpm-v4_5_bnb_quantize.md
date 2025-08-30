@@ -77,9 +77,9 @@ tokenizer.save_pretrained(save_path)
 After quantization, you should see output similar to:
 
 ```
-Output after quantization: The image features an Airbus A380-800 aircraft belonging to Hainan Airlines. The airplane is captured in mid-flight against a clear blue sky, showcasing its impressive size and design. The livery of the plane includes distinctive markings such as the red logo on the tail fin and Chinese characters along the fuselage. This particular model is known for being one of the largest passenger airliners globally due to its four powerful engines and double-deck configuration.
-Inference time after quantization: 6.637855052947998
-GPU memory usage after quantization: 4.35GB
+Output after quantization: The image depicts an Airbus A380-800 aircraft in mid-flight against a clear blue sky. The airplane is predominantly white with a distinctive blue tail fin featuring a red and white logo. The fuselage has the text "Airbus A380-800" written on it, and there are Chinese characters along the side of the aircraft. The landing gear is partially extended, indicating that the plane is either taking off or preparing to land. The engines are visible under the wings, and the overall design showcases the large size and advanced engineering of the Airbus A380 model.
+Inference time after quantization: 9.316158771514893
+GPU memory usage after quantization: 18.97GB
 ```
 
 The quantized model will be saved in the directory specified by `save_path` and can be used for further fine-tuning or inference.
