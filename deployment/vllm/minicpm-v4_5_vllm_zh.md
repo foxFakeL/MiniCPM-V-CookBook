@@ -117,7 +117,56 @@ print("Chat response:", chat_response)
 print("Chat response content:", chat_response.choices[0].message.content)
 ```
 
-### 2.4 多轮对话
+### 2.4 思考与非思考模式
+
+`MiniCPM-V4.5`模型支持在回复前进行思考，可通过设置`opanai`请求参数来开启和关闭思考模式
+
+- `"chat_template_kwargs": {"enable_thinking": True}`
+
+在回复中会通过`</think>`标签将思考与回复进行分隔
+
+```python
+from openai import OpenAI
+import base64
+
+# API 配置
+openai_api_key = "token-abc123"  # API 密钥需与启动服务时设置的密钥保持一致
+openai_api_base = "http://localhost:8000/v1"
+
+client = OpenAI(
+    api_key=openai_api_key,
+    base_url=openai_api_base,
+)
+
+# 读取本地图片并编码
+with open('./assets/airplane.jpeg', 'rb') as file:
+    image = "data:image/jpeg;base64," + base64.b64encode(file.read()).decode('utf-8')
+
+chat_response = client.chat.completions.create(
+    model="<模型路径>",  # 指定模型路径或 HuggingFace ID
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "请描述这张图片"},
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": image,  # 支持网络图片 URL
+                },
+            },
+        ],
+    }],
+    extra_body={
+        "stop_token_ids": [1, 73440],
+        "chat_template_kwargs": {"enable_thinking": True},
+    }
+)
+
+print("Chat response:", chat_response)
+print("Chat response content:", chat_response.choices[0].message.content)
+```
+
+### 2.5 多轮对话
 
 #### 启动参数配置
 
