@@ -129,8 +129,8 @@ In the reply, thinking and the reply will be separated by the `</think>` tag.
 from openai import OpenAI
 import base64
 
-# API 配置
-openai_api_key = "token-abc123"  # API 密钥需与启动服务时设置的密钥保持一致
+# API configuration
+openai_api_key = "token-abc123"
 openai_api_base = "http://localhost:8000/v1"
 
 client = OpenAI(
@@ -138,20 +138,20 @@ client = OpenAI(
     base_url=openai_api_base,
 )
 
-# 读取本地图片并编码
+# Read and encode local image
 with open('./assets/airplane.jpeg', 'rb') as file:
     image = "data:image/jpeg;base64," + base64.b64encode(file.read()).decode('utf-8')
 
 chat_response = client.chat.completions.create(
-    model="<模型路径>",  # 指定模型路径或 HuggingFace ID
+    model="<model_path>", # Specify model path or HuggingFace ID
     messages=[{
         "role": "user",
         "content": [
-            {"type": "text", "text": "请描述这张图片"},
+            {"type": "text", "text": "Please describe this image"},
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": image,  # 支持网络图片 URL
+                    "url": image,   # Supports network image URLs
                 },
             },
         ],
