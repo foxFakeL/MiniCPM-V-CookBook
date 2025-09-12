@@ -174,12 +174,12 @@ For video multi-turn conversations, you need to add the `--limit-mm-per-prompt` 
 
 **Video multi-turn conversation configuration (supports up to 3 videos):**
 ```bash
-vllm serve <model_path> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt video=3
+vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"video": 3}'
 ```
 
 **Image and video mixed input configuration:**
 ```bash
-vllm serve <model_path> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt image=5,video=2
+vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"image":5, "video": 2}'
 ```
 
 #### Multi-turn Conversation Example Code

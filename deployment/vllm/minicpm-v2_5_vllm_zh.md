@@ -1,16 +1,14 @@
-# MiniCPM-V4.5 vLLM 部署指南
+# MiniCPM-V2.5 vLLM 部署指南
+
+>  [!NOTE]
+> MiniCPM-V2.5只支持图片和文本推理
 
 ## 1. 环境准备
 
 ### 1.1 安装 vLLM
 
 ```bash
-pip install vllm==0.10.1
-```
-
-进行视频推理时，需要安装相应的视频模块：
-```bash
-pip install vllm[video]
+pip install vllm >= 0.7.1
 ```
 
 ## 2. API 服务部署
@@ -22,7 +20,7 @@ vllm serve <模型路径>  --dtype auto --max-model-len 2048 --api-key token-abc
 ```
 
 **参数说明：**
-- `<模型路径>`：指定 MiniCPM-V4.5 模型的本地路径
+- `<模型路径>`：指定 MiniCPM-V2.5 模型的本地路径
 - `--api-key`：设置 API 访问密钥
 - `--max-model-len`：设置最大模型长度
 - `--gpu_memory_utilization`：GPU 内存使用率
@@ -69,118 +67,17 @@ print("Chat response:", chat_response)
 print("Chat response content:", chat_response.choices[0].message.content)
 ```
 
-### 2.3 视频推理
-
-```python
-from openai import OpenAI
-import base64
-
-# API 配置
-openai_api_key = "token-abc123"
-openai_api_base = "http://localhost:8000/v1"
-
-client = OpenAI(
-    api_key=openai_api_key,
-    base_url=openai_api_base,
-)
-
-# 读取视频文件并编码为 base64
-with open('./videos/video.mp4', 'rb') as video_file:
-    video_base64 = base64.b64encode(video_file.read()).decode('utf-8')
-
-chat_response = client.chat.completions.create(
-    model="<模型路径>",
-    messages=[
-        {
-            "role": "system",
-            "content": "You are a helpful assistant.",
-        },
-        {
-            "role": "user",
-            "content": [
-                {"type": "text", "text": "请描述这个视频"},
-                {
-                    "type": "video_url",
-                    "video_url": {
-                        "url": f"data:video/mp4;base64,{video_base64}",
-                    },
-                },
-            ],
-        },
-    ],
-    extra_body={
-        "stop_token_ids": [1, 73440]
-    }
-)
-
-print("Chat response:", chat_response)
-print("Chat response content:", chat_response.choices[0].message.content)
-```
-
-### 2.4 思考与非思考模式
-
-`MiniCPM-V4.5`模型支持在回复前进行思考，可通过设置`opanai`请求参数来开启和关闭思考模式
-
-- `"chat_template_kwargs": {"enable_thinking": True}`
-
-在回复中会通过`</think>`标签将思考与回复进行分隔
-
-```python
-from openai import OpenAI
-import base64
-
-# API 配置
-openai_api_key = "token-abc123"  # API 密钥需与启动服务时设置的密钥保持一致
-openai_api_base = "http://localhost:8000/v1"
-
-client = OpenAI(
-    api_key=openai_api_key,
-    base_url=openai_api_base,
-)
-
-# 读取本地图片并编码
-with open('./assets/airplane.jpeg', 'rb') as file:
-    image = "data:image/jpeg;base64," + base64.b64encode(file.read()).decode('utf-8')
-
-chat_response = client.chat.completions.create(
-    model="<模型路径>",  # 指定模型路径或 HuggingFace ID
-    messages=[{
-        "role": "user",
-        "content": [
-            {"type": "text", "text": "请描述这张图片"},
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": image,  # 支持网络图片 URL
-                },
-            },
-        ],
-    }],
-    extra_body={
-        "stop_token_ids": [1, 73440],
-        "chat_template_kwargs": {"enable_thinking": True},
-    }
-)
-
-print("Chat response:", chat_response)
-print("Chat response content:", chat_response.choices[0].message.content)
-```
-
-### 2.5 多轮对话
+### 2.3 多轮对话
 
 #### 启动参数配置
 
-进行视频多轮对话时，需要在 vLLM 启动时添加 `--limit-mm-per-prompt` 参数：
+进行多轮对话时，需要在 vLLM 启动时添加 `--limit-mm-per-prompt` 参数：
 
-**视频多轮对话配置（支持最多3个视频）：**
+**图片多轮对话配置（设置最多支持10张图片）：**
 ```bash
-vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"video": 3}'
+vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"image": 10}'
 ```
 
-**图片和视频混合输入配置：**
-```bash
-vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"image":5, "video": 2}'
-```
 
 #### 多轮对话示例代码
 
@@ -263,7 +160,7 @@ while True:
     )
 
     ai_message = chat_response.choices[0].message
-    print("MiniCPM-V4.5:", ai_message.content)
+    print("MiniCPM-V2.5:", ai_message.content)
     
     messages.append({
         "role": "assistant",
@@ -281,7 +178,7 @@ from vllm import LLM, SamplingParams
 # 模型配置
 MODEL_NAME = "<模型路径>"
 # 可选择使用 HuggingFace 模型 ID
-# MODEL_NAME = "openbmb/MiniCPM-V-4_5"
+# MODEL_NAME = "openbmb/MiniCPM-V-4"
 
 # 加载图片
 image = Image.open("./assets/airplane.jpeg").convert("RGB")
@@ -345,7 +242,7 @@ print(outputs[0].outputs[0].text)
 
 ## 注意事项
 
-1. **模型路径**：需将所有示例中的 `<模型路径>` 替换为实际的 MiniCPM-V4.5 模型路径
+1. **模型路径**：需将所有示例中的 `<模型路径>` 替换为实际的 MiniCPM-V2.5 模型路径
 2. **API 密钥**：确保启动服务时的 API 密钥与客户端代码中的密钥保持一致
 3. **文件路径**：需根据实际情况调整图片、视频文件的路径
 4. **内存配置**：应根据 GPU 内存情况合理调整 `--gpu_memory_utilization` 参数

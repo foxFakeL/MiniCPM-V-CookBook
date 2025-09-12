@@ -1,14 +1,30 @@
-# MiniCPM-V4 vLLM Deployment Guide
+# MiniCPM-O2.6 vLLM Deployment Guide
 
 ## 1. Environment Setup
 
 ### 1.1 Install vLLM
+> [!NOTE]
+> MiniCPM-O2.6 requires a specific version of transformers to run on vllm.
+>
+> Currently tested feasible solutions:
+>
+> 1、`0.9.2 >= vllm >= 0.7.1 + 4.52.3 >= transformers >= 4.48.2`
+>
+> 2、`vllm >= 0.10.0 + 4.53.3 >= transformers >= 4.53.0` 
+>
+> 3、**Temporary solution(Will submit immediately)**: A new branch is provided here to fix issues with different transformers. You can install from the source code using this branch [Fix-minicpm-o-2_6](https://github.com/tc-mb/vllm/tree/Fix/Fix-minicpm-o-2_6-WhisperEncodingLayer). For installation methods, please refer to the [vLLM documentation](https://docs.vllm.ai/en/v0.10.1.1/getting_started/installation/index.html)
 
 ```bash
-pip install vllm==0.10.1
+pip install vllm == 0.7.1
+pip install transformers == 4.48.2
 ```
 
 For video inference, install the video module:
+```bash
+pip install vllm[video]
+```
+
+For audio inference, install the audio module:
 ```bash
 pip install vllm[video]
 ```
@@ -22,7 +38,7 @@ vllm serve <model_path>  --dtype auto --max-model-len 2048 --api-key token-abc12
 ```
 
 **Parameter Description:**
-- `<model_path>`: Specify the local path to your MiniCPM-V4 model
+- `<model_path>`: Specify the local path to your MiniCPM-O2.6 model
 - `--api-key`: Set the API access key
 - `--max-model-len`: Set the maximum model length
 - `--gpu_memory_utilization`: GPU memory utilization rate
@@ -116,8 +132,54 @@ chat_response = client.chat.completions.create(
 print("Chat response:", chat_response)
 print("Chat response content:", chat_response.choices[0].message.content)
 ```
+### 2.4 Audio Inference
+```python
+from openai import OpenAI
+import base64
 
-### 2.4 Multi-turn Conversation
+# API 配置
+openai_api_key = "token-abc123"
+openai_api_base = "http://localhost:8000/v1"
+
+client = OpenAI(
+    api_key=openai_api_key,
+    base_url=openai_api_base,
+)
+
+# 读取音频文件并编码为 base64
+with open('./audio/audio.wav', 'rb') as audio_file:
+    video_base64 = base64.b64encode(audio_file.read()).decode('utf-8')
+
+chat_response = client.chat.completions.create(
+    model="<模型路径>",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a helpful assistant.",
+        },
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "请描述这个音频"},
+                {
+                    "type": "video_url",
+                    "video_url": {
+                        "url": f"data:audio/wav;base64,{video_base64}",
+                    },
+                },
+            ],
+        },
+    ],
+    extra_body={
+        "stop_token_ids": [1, 73440]
+    }
+)
+
+print("Chat response:", chat_response)
+print("Chat response content:", chat_response.choices[0].message.content)
+```
+
+### 2.5 Multi-turn Conversation
 
 #### Launch Parameter Configuration
 
@@ -214,7 +276,7 @@ while True:
     )
 
     ai_message = chat_response.choices[0].message
-    print("MiniCPM-V4:", ai_message.content)
+    print("MiniCPM-O2.6:", ai_message.content)
     
     messages.append({
         "role": "assistant",
@@ -296,7 +358,7 @@ print(outputs[0].outputs[0].text)
 
 ## Notes
 
-1. **Model Path**: Replace all `<model_path>` in the examples with the actual MiniCPM-V4 model path
+1. **Model Path**: Replace all `<model_path>` in the examples with the actual MiniCPM-O2.6 model path
 2. **API Key**: Ensure the API key when launching the service matches the key in the client code
 3. **File Paths**: Adjust image and video file paths according to your actual situation
 4. **Memory Configuration**: Adjust the `--gpu_memory_utilization` parameter appropriately based on GPU memory

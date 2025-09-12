@@ -125,12 +125,12 @@ print("Chat response content:", chat_response.choices[0].message.content)
 
 **视频多轮对话配置（支持最多3个视频）：**
 ```bash
-vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt video=3
+vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"video": 3}'
 ```
 
 **图片和视频混合输入配置：**
 ```bash
-vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt image=5,video=2
+vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"image":5, "video": 2}'
 ```
 
 #### 多轮对话示例代码

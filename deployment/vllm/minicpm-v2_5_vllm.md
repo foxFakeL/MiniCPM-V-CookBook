@@ -1,16 +1,14 @@
-# MiniCPM-V4 vLLM Deployment Guide
+# MiniCPM-V2.5 vLLM Deployment Guide
 
 ## 1. Environment Setup
+
+> [!NOTE]
+> MiniCPM-V2.5 only supports image and text inference
 
 ### 1.1 Install vLLM
 
 ```bash
-pip install vllm==0.10.1
-```
-
-For video inference, install the video module:
-```bash
-pip install vllm[video]
+pip install vllm >= 0.7.1
 ```
 
 ## 2. API Service Deployment
@@ -22,7 +20,7 @@ vllm serve <model_path>  --dtype auto --max-model-len 2048 --api-key token-abc12
 ```
 
 **Parameter Description:**
-- `<model_path>`: Specify the local path to your MiniCPM-V4 model
+- `<model_path>`: Specify the local path to your MiniCPM-V2.5 model
 - `--api-key`: Set the API access key
 - `--max-model-len`: Set the maximum model length
 - `--gpu_memory_utilization`: GPU memory utilization rate
@@ -69,68 +67,15 @@ print("Chat response:", chat_response)
 print("Chat response content:", chat_response.choices[0].message.content)
 ```
 
-### 2.3 Video Inference
-
-```python
-from openai import OpenAI
-import base64
-
-# API configuration
-openai_api_key = "token-abc123"
-openai_api_base = "http://localhost:8000/v1"
-
-client = OpenAI(
-    api_key=openai_api_key,
-    base_url=openai_api_base,
-)
-
-# Read video file and encode to base64
-with open('./videos/video.mp4', 'rb') as video_file:
-    video_base64 = base64.b64encode(video_file.read()).decode('utf-8')
-
-chat_response = client.chat.completions.create(
-    model="<model_path>",
-    messages=[
-        {
-            "role": "system",
-            "content": "You are a helpful assistant.",
-        },
-        {
-            "role": "user",
-            "content": [
-                {"type": "text", "text": "Please describe this video"},
-                {
-                    "type": "video_url",
-                    "video_url": {
-                        "url": f"data:video/mp4;base64,{video_base64}",
-                    },
-                },
-            ],
-        },
-    ],
-    extra_body={
-        "stop_token_ids": [1, 73440]
-    }
-)
-
-print("Chat response:", chat_response)
-print("Chat response content:", chat_response.choices[0].message.content)
-```
-
-### 2.4 Multi-turn Conversation
+### 2.3 Multi-turn Conversation
 
 #### Launch Parameter Configuration
 
-For video multi-turn conversations, you need to add the `--limit-mm-per-prompt` parameter when launching vLLM:
+For multi-turn conversations, you need to add the `--limit-mm-per-prompt` parameter when launching vLLM:
 
-**Video multi-turn conversation configuration (supports up to 3 videos):**
+**Image multi-turn conversation configuration (Set to support up to 10 images):**
 ```bash
-vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"video": 3}'
-```
-
-**Image and video mixed input configuration:**
-```bash
-vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"image":5, "video": 2}'
+vllm serve <模型路径> --dtype auto --max-model-len 4096 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --limit-mm-per-prompt '{"image": 10}'
 ```
 
 #### Multi-turn Conversation Example Code
@@ -214,7 +159,7 @@ while True:
     )
 
     ai_message = chat_response.choices[0].message
-    print("MiniCPM-V4:", ai_message.content)
+    print("MiniCPM-V2.5:", ai_message.content)
     
     messages.append({
         "role": "assistant",
@@ -296,7 +241,7 @@ print(outputs[0].outputs[0].text)
 
 ## Notes
 
-1. **Model Path**: Replace all `<model_path>` in the examples with the actual MiniCPM-V4 model path
+1. **Model Path**: Replace all `<model_path>` in the examples with the actual MiniCPM-V2.5 model path
 2. **API Key**: Ensure the API key when launching the service matches the key in the client code
 3. **File Paths**: Adjust image and video file paths according to your actual situation
 4. **Memory Configuration**: Adjust the `--gpu_memory_utilization` parameter appropriately based on GPU memory
