@@ -157,7 +157,7 @@ chat_response = client.chat.completions.create(
         ],
     }],
     extra_body={
-        "stop_token_ids": [1, 73440],
+        "stop_token_ids": [1, 151645],
         "chat_template_kwargs": {"enable_thinking": True},
     }
 )
