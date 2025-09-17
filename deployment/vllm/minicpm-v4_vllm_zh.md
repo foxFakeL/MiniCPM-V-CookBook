@@ -5,7 +5,7 @@
 ### 1.1 安装 vLLM
 
 ```bash
-pip install vllm==0.10.2
+pip install vllm==0.10.1
 ```
 
 进行视频推理时，需要安装相应的视频模块：
