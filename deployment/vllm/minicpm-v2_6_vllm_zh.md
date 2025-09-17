@@ -61,7 +61,7 @@ chat_response = client.chat.completions.create(
         ],
     }],
     extra_body={
-        "stop_token_ids": [1, 73440]
+        "stop_token_ids": [1, 151645]
     }
 )
 
@@ -109,7 +109,7 @@ chat_response = client.chat.completions.create(
         },
     ],
     extra_body={
-        "stop_token_ids": [1, 73440]
+        "stop_token_ids": [1, 151645]
     }
 )
 
@@ -209,7 +209,7 @@ while True:
         model="<模型路径>",
         messages=messages,
         extra_body={
-            "stop_token_ids": [1, 73440]
+            "stop_token_ids": [1, 151645]
         }
     )
 
