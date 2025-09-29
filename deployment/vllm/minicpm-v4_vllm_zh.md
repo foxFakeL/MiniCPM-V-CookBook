@@ -18,7 +18,7 @@ pip install vllm[video]
 ### 2.1 启动 API 服务
 
 ```bash
-vllm serve <模型路径>  --dtype auto --max-model-len 2048 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code
+vllm serve <模型路径>  --dtype auto --max-model-len 2048 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --max-num-batched-tokens 2048
 ```
 
 **参数说明：**

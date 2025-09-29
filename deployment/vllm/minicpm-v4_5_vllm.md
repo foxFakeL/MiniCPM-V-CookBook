@@ -18,9 +18,8 @@ pip install vllm[video]
 ### 2.1 Launch API Service
 
 ```bash
-vllm serve <model_path>  --dtype auto --max-model-len 2048 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code
+vllm serve <model_path>  --dtype auto --max-model-len 2048 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --max-num-batched-tokens 2048
 ```
-
 **Parameter Description:**
 - `<model_path>`: Specify the local path to your MiniCPM-V4.5 model
 - `--api-key`: Set the API access key
